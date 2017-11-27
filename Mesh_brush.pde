@@ -27,6 +27,7 @@ void setup() {
 
   // System declaration and settings
   system = new DelaunaySystem(MAX_POINTS);
+  //system.generateRandom();
   system.setStroke(255);
   system.setStrokeWeight(0.9);
 }

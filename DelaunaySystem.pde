@@ -3,9 +3,11 @@ class DelaunaySystem {
   float[][]             points;
   ArrayList<PVector>    arrayPoints;
   color                 strokeColor;
+  int                   strokeAlpha;
   float                 strokeWeight;
   int                   maxPoints;
   float                 lineDistance;
+  boolean               generated;
 
   DelaunaySystem(int max) {
     arrayPoints = new ArrayList();
@@ -20,7 +22,7 @@ class DelaunaySystem {
 
     pushStyle();
     // Set styles
-    stroke(strokeColor);
+    stroke(strokeColor, strokeAlpha);
     strokeWeight(strokeWeight);
     
     convertToFloat();
@@ -48,6 +50,14 @@ class DelaunaySystem {
       point.add(PVector.random2D());
     }
   }
+  
+  // Generate random points on sketch
+  public void generateRandom() {
+    generated = true;
+    for (int i = 0; i < maxPoints; i++) {
+      addPoint(random(width), random(height));
+    }
+  }
 
   // Adds point to the internal array list
   public void addPoint(float x, float y) {
@@ -67,14 +77,26 @@ class DelaunaySystem {
 
   // If number of points reaches the limit, clear the array
   private void checkLimit() {
+    
+    if (generated) return;
     boolean isOverLimit = points.length >= maxPoints;
     if (isOverLimit) {
       arrayPoints.clear();
     }
   }
-
+  
+  public float getMeanX() {
+    return Statistics.mean(points);
+  }
+  
   public void setStroke(int c) {
     this.strokeColor = c;
+    this.strokeAlpha = 255;
+  }
+  
+  public void setStroke(int c, int alpha) {
+    this.strokeColor = c;
+    this.strokeAlpha = alpha;
   }
 
   public void setStrokeWeight(float sw) {
