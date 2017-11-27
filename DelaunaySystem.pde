@@ -1,3 +1,5 @@
+import java.lang.Float.*;
+
 class DelaunaySystem {
 
   float[][]             points;
@@ -12,7 +14,7 @@ class DelaunaySystem {
   DelaunaySystem(int max) {
     arrayPoints = new ArrayList();
     maxPoints = max;
-    points = new float[1][1];
+    points = new float[1][2];
   }
 
   // Main rendering function
@@ -24,12 +26,12 @@ class DelaunaySystem {
     // Set styles
     stroke(strokeColor, strokeAlpha);
     strokeWeight(strokeWeight);
-    
+
     convertToFloat();
-    
+
     Delaunay delaunay = new Delaunay(points);
     float[][] myEdges = delaunay.getEdges(); 
-    
+
     for (int i=0; i < myEdges.length; i++)
     {
       float startX = myEdges[i][0];
@@ -41,16 +43,16 @@ class DelaunaySystem {
       }
       line( startX, startY, endX, endY );
     }
-    
+
     popStyle();
   }
-  
+
   public void move() {
     for (PVector point : arrayPoints) {
       point.add(PVector.random2D());
     }
   }
-  
+
   // Generate random points on sketch
   public void generateRandom() {
     generated = true;
@@ -77,23 +79,41 @@ class DelaunaySystem {
 
   // If number of points reaches the limit, clear the array
   private void checkLimit() {
-    
+
     if (generated) return;
     boolean isOverLimit = points.length >= maxPoints;
     if (isOverLimit) {
       arrayPoints.clear();
+      background(0);
     }
+    
   }
-  
+
   public float getMeanX() {
-    return Statistics.mean(points);
+    float result = Statistics.meanX(points);
+    return Float.isNaN(result) ? 0 : result;
   }
-  
+
+  public float getMeanY() {
+    float result = Statistics.meanY(points);
+    return Float.isNaN(result) ? 0 : result;
+  }
+
+  public float getMedianX() {
+    float result = Statistics.medianX(points);
+    return Float.isNaN(result) ? 0 : result;
+  }
+
+  public float getMedianY() {
+    float result = Statistics.medianY(points);
+    return Float.isNaN(result) ? 0 : result;
+  }
+
   public void setStroke(int c) {
     this.strokeColor = c;
     this.strokeAlpha = 255;
   }
-  
+
   public void setStroke(int c, int alpha) {
     this.strokeColor = c;
     this.strokeAlpha = alpha;
