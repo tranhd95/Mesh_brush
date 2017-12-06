@@ -29,8 +29,11 @@ class DelaunaySystem {
 
     convertToFloat();
 
-    Delaunay delaunay = new Delaunay(points);
+    Voronoi delaunay = new Voronoi(points);
     float[][] myEdges = delaunay.getEdges(); 
+
+    Delaunay delaunay2 = new Delaunay(points);
+    float[][] myEdges2 = delaunay2.getEdges();
 
     for (int i=0; i < myEdges.length; i++)
     {
@@ -38,6 +41,18 @@ class DelaunaySystem {
       float startY = myEdges[i][1];
       float endX = myEdges[i][2];
       float endY = myEdges[i][3];
+      if (dist(startX, startY, endX, endY) > lineDistance) {
+        continue;
+      }
+      line( startX, startY, endX, endY );
+    }
+
+    for (int i=0; i < myEdges2.length; i++)
+    {
+      float startX = myEdges2[i][0];
+      float startY = myEdges2[i][1];
+      float endX = myEdges2[i][2];
+      float endY = myEdges2[i][3];
       if (dist(startX, startY, endX, endY) > lineDistance) {
         continue;
       }
@@ -86,7 +101,6 @@ class DelaunaySystem {
       arrayPoints.clear();
       background(0);
     }
-    
   }
 
   public float getMeanX() {
@@ -125,5 +139,9 @@ class DelaunaySystem {
 
   public void setLineDistance(float d) {
     lineDistance = d;
+  }
+  
+  public void clear() {
+    arrayPoints.clear();
   }
 }
